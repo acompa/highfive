@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}HighFive -- user name here{% endblock %}
+
+{% block toparea %}
+  	<div id="top">
+		<div id="hi5" class="hi5title">
+			HighFive
+		</div>
+		<div id="manage">
+			test | test | test
+		</div>
+		<br><br>
+	</div>
+{% endblock %}
+
+<script>
+function score(kind) {
+	$.getJSON("/hi5/vote/", { bhash:{{ object.bhash }}, score: kind }, function(json) {
+		alert("Was successful?: " + json["success"]);
+	});
+}
+
+function addClickHandlers() {
+	$("#upvote").click( function() { score("up") });
+	$("#downvote").click( function() { score("down") });
+}
+$(document).ready(addClickHandlers);
+</script>
+
+{% block body %}
+	<div id="link-section">
+		{% for i in hashToShow %}
+			<div id="neuton" class="title"> 
+				<a href={{ i.url }} class="title">{{ i.title }} </a>
+				<br>
+				<div class="address">
+					{{ i.url }}  --  from <a href="http://www.twitter.com/{{ i.source }}" class="address">{{ i.source }}</a>
+				</div>
+			</div>
+			<div class="vote">
+				<span id="upvote"><a href="http://www.google.com">A</a></span>
+				<span id="downvote">V</span>
+			</div>
+		{% endfor %}
+	</div>
+{% endblock %}
+
+{% include 'footer.html' %}
