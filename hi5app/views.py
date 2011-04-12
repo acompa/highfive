@@ -47,9 +47,9 @@ def twitter_return(request):
 	access_token = twitter.getAccessToken()
  
 	# print getmembers(access_token)
-	print access_token.to_string()
 	request.session['access_token'] = access_token.to_string()
 	print request.session.get('access_token')
+	print request.session.session_key
 	request.session.modified = True
 	auth_user = authenticate(access_token=access_token)
  
@@ -65,6 +65,7 @@ def twitter_return(request):
  
 	# authentication was successful, user is now logged in
 	return HttpResponseRedirect(reverse('links'))
+
 	
 def printHashInfo(request):
 	""" Sorts the data in reverse chronological order, by highest
@@ -73,8 +74,9 @@ def printHashInfo(request):
 	
 	# In the future, ALWAYS use session's 'get' method to retrieve 
 	# values.
-	a = request.session.get('access_token')
+	a = request.session.get('access_token', None)
 	print a
+	print request.session.session_key
 	a_token = oauth.OAuthToken.from_string(a)
 	
 	# Initialize APIs, and get the user's name (redundancy).

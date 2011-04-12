@@ -99,7 +99,7 @@ CACHES = {
 # Use this to make sure session data isn't lost.
 SESSION_SAVE_EVERY_REQUEST = True
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
-SESSION_COOKIE_DOMAIN = "twitter.com"
+# SESSION_COOKIE_DOMAIN = ".acompa"
 
 ROOT_URLCONF = 'highfive.urls'
 
