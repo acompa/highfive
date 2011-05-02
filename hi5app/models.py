@@ -4,7 +4,8 @@ from django.contrib.auth.models import User
 
 class Hashdata(models.Model):
 	""" Data in MySQL for each bit.ly hash. Add 'user' to this soon. """
-	name = models.CharField(max_length=6)
+	username = models.CharField(max_length=20)
+	bhash = models.CharField(max_length=6)
 	title = models.CharField(max_length=200)
 	url = models.URLField()
 	time = models.FloatField()        #seconds since epoch
@@ -15,7 +16,15 @@ class Hashdata(models.Model):
 	score = models.IntegerField()
 	
 	def __unicode__(self):
-		return self.name
+		return self.username
+		
+	def up(self):
+		self.score += 1
+		self.save()
+
+	def down(self):
+		self.score -= 1
+		self.save()
 
 class UserProfile(models.Model):
 	user = models.ForeignKey(User)

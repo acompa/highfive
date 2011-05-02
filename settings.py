@@ -13,11 +13,13 @@ CONSUMER_KEY = "c1z2SA8p1EAXthvpCrYUA"
 CONSUMER_SECRET = "2Qh67Sf2I9iV13apPtdNXvQTwQ5NikJZRTjiQ9Gagac"
  
 AUTHENTICATION_BACKENDS = (
-    'backends.twitteroauth.TwitterBackend',
     'django.contrib.auth.backends.ModelBackend',
+    'highfive.backends.twitteroauth.TwitterBackend',
 )
  
 AUTH_PROFILE_MODULE = "hi5app.userprofile"
+
+LOGIN_URL = "http://acompa.net/highfive/"
 
 MANAGERS = ADMINS
 
@@ -68,6 +70,7 @@ MEDIA_URL = ''
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
 ADMIN_MEDIA_PREFIX = '/media/'
+# STATIC_URL = '/static/'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'l)^(ps&-x8rns^br5j#^dvt=&ls*$f8#=p#kyow&_zdo*rrhn)'
@@ -99,7 +102,10 @@ CACHES = {
 # Use this to make sure session data isn't lost.
 SESSION_SAVE_EVERY_REQUEST = True
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
-# SESSION_COOKIE_DOMAIN = ".acompa"
+SESSION_COOKIE_DOMAIN = ".acompa.net"
+
+# Trailing slashes.
+APPEND_SLASH = True
 
 ROOT_URLCONF = 'highfive.urls'
 
@@ -114,6 +120,7 @@ INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+	# 'django.contrib.staticfiles',
     # 'django.contrib.sites',
     # 'django.contrib.messages',
 	'highfive.hi5app',

@@ -1,20 +1,25 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"  "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
 <head>
-	<link rel="stylesheet" type="text/css" href="http://acompa.net/highfive/highfive.css">
-	<script type="text/javascript" src="http://acompa.net/highfive/jquery.js"></script>
+	<link rel="stylesheet" type="text/css" href="http://acompa.net/static/highfive/highfive.css">
+	<script type="text/javascript" src="http://acompa.net/static/highfive/jquery.js"></script>
 	<title>{% block title %}{% endblock %}</title>
 </head>
 
-	<body topmargin="0" leftmargin="0" bottommargin="0">
+	<body>
+		<div id="nonFooter">
+			<div id="content">
 	{% block toparea %} {% endblock %}
 	{% block body %} {% endblock %}
+			</div>
+		</div>
+
 	
 	
-<div id="bottom" class="center">
+<div id="footer" class="center">
 	&copy; 2011, Alejandro Companioni
 	<br>
-	Design help from <a href="mailto:redtens@gmail.com" color="#D99282">Redy Companioni</a>.
+	<a href="mailto:redtens@gmail.com" class="redy">Redy Companioni</a> helped me design this site.
 	<br>
 </div>
 

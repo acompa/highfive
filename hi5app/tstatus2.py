@@ -15,7 +15,7 @@ def startAPIs(C_KEY, C_SEC, A_TOKEN):
 def statusAge(x, page):
 	return (time() - page[x].created_at_in_seconds) / (60*60)
 
-def getHighFive(bitly, twtr, name):
+def getHighFive(bitly, twtr, user):
 	statuses = []
 	statusListIsComplete = False
 	pagenum = 1
@@ -24,7 +24,7 @@ def getHighFive(bitly, twtr, name):
 	# on a given page is not older than 24h, keep pulling pages.
 	while (not statusListIsComplete):
 		x = -1
-		page = twtr.GetFriendsTimeline(user=name, page=pagenum, count=100)	
+		page = twtr.GetFriendsTimeline(user=str(user), page=pagenum, count=100)	
 
 		# Skip this while loop altogether if the oldest status is 
 		# <24 hours old. Else, kick into binary search until the 
@@ -68,7 +68,7 @@ def getHighFive(bitly, twtr, name):
 				try:
 					clicksByHash[h] = (bitly.clicks(h)[0]['global_clicks'],
 										   s.user.screen_name)
-				except KeyError:
+				except KeyError or BitlyError:
 					#print s.text
 					continue
 			else:
@@ -90,28 +90,27 @@ def getHighFive(bitly, twtr, name):
 	              'source': clicksByHash[h][1],
 			      'score' : 0}
 		if (hi5[h]['title'] == None): hi5[h]['title'] = "No title."
-		print "%s (with %i clicks)" % (hi5[h]['title'], clicksByHash[h][0])
+		print "From %s (with %i clicks)" % (hi5[h]['source'], clicksByHash[h][0])
 		print "URL: %s\n" % hi5[h]['url']
 
 	# Storing top five data to a MySQL db.
 
 	from django.db import models
-	from hi5app.models import Hashdata
+	from models import Hashdata
 
 	for h in topHashes:
-		x = Hashdata(name = h, 
-	             	 title = hi5[h]['title'], 
-	             	 url = hi5[h]['url'], 
-	             	 time = time(), 
-	             	 clicks = hi5[h]['clicks'], 
+		x = Hashdata(username = user,
+                     bhash = h, 
+					 title = hi5[h]['title'], 
+					 url = hi5[h]['url'], 
+					 time = time(), 
+					 clicks = hi5[h]['clicks'], 
 					 cpm = hi5[h]['cpm'],
 					 cpd = hi5[h]['cpd'],
 					 source = hi5[h]['source'],
-				 	 score = hi5[h]['score'])
+					 score = hi5[h]['score'])
 		x.save()
 		
-	return topHashes, hi5
-
 # Voting functionality.
 # if user clicks on vote button:
 # 	x = Hashdata.objects.get(hash='xxxxxx')
