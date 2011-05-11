@@ -26,6 +26,9 @@ def getHighFive(bitly, twtr, user):
 		x = -1
 		page = twtr.GetFriendsTimeline(user=str(user), page=pagenum, count=100)	
 
+		# Have we exceeded the # of allowed API calls?
+		if len(page) == 0: break
+
 		# Skip this while loop altogether if the oldest status is 
 		# <24 hours old. Else, kick into binary search until the 
 		# search zeroes in on the same index. Instantiated x 

@@ -1,12 +1,19 @@
 # Django settings for highfive project.
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
+# Error email settings.
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
 	('Alejandro Companioni', 'achompas@gmail.com'),
 )
+EMAIL_USE_TLS = True
+EMAIL_HOST ='smtp.gmail.com'
+EMAIL_HOST_USER='achompas'
+EMAIL_HOST_PASSWORD='lbkorn27'
+EMAIL_PORT = 587
+SERVER_EMAIL = 'webmaster@acompa.net'
 
 CONSUMER_KEY = "c1z2SA8p1EAXthvpCrYUA"
  

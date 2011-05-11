@@ -11,6 +11,7 @@ from django.core.urlresolvers import reverse
 from tstatus2 import getHighFive, startAPIs
 from bitly_api import Connection
 from inspect import getmembers
+from time import sleep
 
 from oauthtwitter import OAuthApi
 import oauth.oauth as oauth
@@ -84,8 +85,13 @@ def getHashInfo(request):
 	request.session['user'] = user
 	request.session['pic'] = pic
 	
-	# Calculate the top links and store them to SQL db.
-	getHighFive(b, t, user)
+	# Calculate the top links and store them to SQL db. Catch
+	# any errors in pulling the user's info and redirect them
+	# to the login page.
+	try:
+		getHighFive(b, t, user)
+	except:
+		return HttpResponseRedirect(reverse('login'))
 	return HttpResponseRedirect(reverse('links'))
 
 def printHashInfo(request):
