@@ -63,7 +63,12 @@ def twitter_return(request):
  
 	# authentication was successful, user is now logged in
 	return HttpResponseRedirect(reverse('redirect'))
-
+	
+def tempLoad(request):
+	""" Temporarily display a loading page. """
+	sleep(2)
+	return HttpResponseRedirect(reverse('l'))
+	#return render_to_response('redirect.html')
 	
 def getHashInfo(request):
 	""" Sorts the data in reverse chronological order, by highest
@@ -118,6 +123,15 @@ def printIntro(request):
 	# t = get_template('intro.html')
 	# html = t.render(Context())
 	return render_to_response('intro.html')
+	
+def printAbout(request):
+	return render_to_response('about.html')
+
+def printTerms(request):
+	return render_to_response('terms.html')
+
+def printHelp(request):
+	return render_to_response('help.html')	
 	
 def voteArticle(request):
 	""" Setting up voting functionality. """

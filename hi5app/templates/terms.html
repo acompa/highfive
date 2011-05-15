@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}HighFive &ndash; Terms{% endblock %}
+
+{% block toparea %}
+	<div id="top">
+		<span id="hi5" class="hi5title">
+			<a href="http://www.acompa.net/highfive" class="hi5link">HighFive</a>
+		</span>
+		<span id="login">
+			<a href="http://acompa.net/highfive/login/" id="logout">Log in with Twitter.</a>
+		</span>
+		<br><br>
+	</div>
+{% endblock %}
+
+{% block body %}
+	<div id="link-section">
+		<h1>Terms</h1>
+		<p>HighFive takes your privacy very seriously. Thus, you can count on the following:</p>
+		<p><span class="plink">1.</span> Your Twitter credentials will only be used to log into Twitter. They are not stored locally.</p>
+		<p><span class="plink">2.</span> The content in your Twitter timeline will not be saved&ndash;we only need the links in your timeline.</p>
+		<p><span class="plink">3.</span> Your direct messages will not be accessed at all.
+		<br>
+		<p>HighFive will, however, store the username of the person who tweeted the link. We will only use this information to improve our link recommendations. We will not use this information to engage in any uncool behavior, such as tweeting at your friends about HighFive or free iPads.</p>
+	</div>
+{% endblock %}

@@ -4,18 +4,18 @@
 
 {% block toparea %}
   	<div id="top">
-		<span id="hi5" class="hi5title">
-			HighFive
-			<span id="manage">
-				<a href="http://www.twitter.com/{{user}}"><img src="{{pic}}" height="40" width="40" alt="{{user}}"></a>
-				<a href="http://www.twitter.com/{{user}}" class="username">{{user}}</a>
-				<div id="logout"> 
-					<a href="http://acompa.net/highfive/logout/" class="signout">Logout.</a> 
-				</div>
+			<span id="hi5" class="hi5title">
+				HighFive
+				<span id="manage">
+					<a href="http://www.twitter.com/{{user}}"><img src="{{pic}}" height="40" width="40" alt="{{user}}"></a>
+					<a href="http://www.twitter.com/{{user}}" class="username">{{user}}</a>
+					<div id="logout"> 
+						<a href="http://acompa.net/highfive/logout/" class="signout">Logout.</a> 
+					</div>
+				</span>
 			</span>
-		</span>
-		<br><br>
-	</div>
+			<br><br>
+		</div>
 {% endblock %}
 
 {% block body %}
@@ -23,13 +23,15 @@
 		{% for i in results %}
 		<script type="text/javascript">
 			function score(kind, hashcode) {
-				$.getJSON("vote/", { bhash: hashcode, score: kind }, function(json) {
-					alert("Thanks for your vote!");
-				});
+				$.getJSON("vote/", { bhash: hashcode, score: kind }, function(json) { });
 			}
 
 			function addClickHandlers() {
-				$("#{{i.bhash}}").click(function() { score("up", "{{i.bhash}}") });
+				$("#{{i.bhash}}").click(
+					function() { 
+						score("up", "{{i.bhash}}"); 				
+						$("#{{i.bhash}}").hide(); 
+						});
 				// $("#downvote").click(function() { score("down") });
 			}
 			$(document).ready(addClickHandlers);
@@ -39,7 +41,7 @@
 			<!-- <span id="downvote">V</span> -->
 		</span>
 		<div class="title"> 
-			<a href="{{ i.url }}" class="title">{{ i.title }} </a>
+			<a href="{{ i.url }}" class="title" TARGET="_blank">{{ i.title }} </a>
 			<br>
 			<div class="address">
 				{{ i.url }}  --  from <a href="http://www.twitter.com/{{ i.source }}" class="source">{{ i.source }}</a>

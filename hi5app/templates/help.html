@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}HighFive &ndash; About{% endblock %}
+
+{% block toparea %}
+  	<div id="top">
+			<span id="hi5" class="hi5title">
+				<a href="http://www.acompa.net/highfive" class="hi5link">HighFive</a>
+			</span>
+			<span id="login">
+				<a href="http://acompa.net/highfive/login/" id="logout">Log in with Twitter.</a>
+				</span>
+			<br><br>
+		</div>
+{% endblock %}
+
+{% block body %}
+	<div id="link-section">
+		<h1>Help</h1>
+		<p>HighFive brings you the news and lets you get back to work.</p>
+		<p>News aggregators and RSS readers provide content from a variety of websites, but users can be overwhelmed by the number of links they encounter. HighFive grabs the five most popular links from your Twitter feed over the last 24 hours and returns them in a simple format. </p>
+		<p>Once you log in, HighFive will print your links like this: </p>
+		<div id="link-example">	<img src="http://acompa.net/static/highfive/linkexample.jpg" 
+			 alt="Here's what a HighFive link looks like." />
+		</div>
+		<p>If you enjoy a link, make sure to vote for it with that little orange arrow. Over time, HighFive will use your votes to recommend better links.</p>
+		<p>One last thing: your links might take a while to load. If so, please be patient while the HighFive team learns to write fast, pretty code.</p>
+	</div>
+{% endblock %}
