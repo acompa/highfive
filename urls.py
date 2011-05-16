@@ -9,7 +9,7 @@ import hi5app.views
 urlpatterns = patterns('',
     # Example:
     url(r'^highfive/l/$', hi5app.views.getHashInfo, name='l'),
-    url(r'^highfive/redirect/$', hi5app.views.tempLoad, name='redirect'),
+    url(r'^highfive/i/$', hi5app.views.getUserInfo, name='info'),
     url(r'^highfive/links/$', hi5app.views.printHashInfo, name='links'),
 	(r'^hello/$', hi5app.views.hello),
 	(r'^site_media/(?P<path>.*)$', 'django.views.static.serve',
