@@ -18,12 +18,13 @@ def getHighFive(bitly, twtr, user):
 	statuses = []
 	statusListIsComplete = False
 	pagenum = 1
+	user = str(user)
 	
 	# Start pulling pages of statuses. As long as the last status 
 	# on a given page is not older than 24h, keep pulling pages.
 	while (not statusListIsComplete):
 		x = -1
-		page = twtr.GetFriendsTimeline(user=str(user), page=pagenum, count=100)	
+		page = twtr.GetFriendsTimeline(user=user, page=pagenum, count=100)	
 
 		# Have we exceeded the # of allowed API calls?
 		if len(page) == 0: break

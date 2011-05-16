@@ -50,9 +50,9 @@ def twitter_return(request):
 	access_token = twitter.getAccessToken()
 	
 	# Save user info.
-	# t = startAPIs(CONSUMER_KEY, CONSUMER_SECRET, access_token)
-	# request.session['user'] = t.VerifyCredentials().screen_name
-	# request.session['pic'] = t.VerifyCredentials().profile_image_url
+	t = startAPIs(CONSUMER_KEY, CONSUMER_SECRET, access_token)
+	request.session['user'] = t.VerifyCredentials().screen_name
+	request.session['pic'] = t.VerifyCredentials().profile_image_url
  
 	# print getmembers(access_token)
 	auth_user = authenticate(access_token=access_token)
@@ -68,18 +68,31 @@ def twitter_return(request):
  
 	# authentication was successful, user is now logged in
 	return HttpResponseRedirect(reverse('links'))
-	
+
+def printHashInfo(request):
+	""" Pull top five links from the SQL database, and send them to
+	the link view. """
+	user = request.session.get('user', None)
+	pic = request.session.get('pic', None)
+	# t = get_template('palm2.html')
+	# html = t.render(Context({'results':results}))
+	return render_to_response('palm.html')
+		
 def getUserInfo(request):
 	""" Get user name and picture. """
 	if request.is_ajax():
 		
-		a = request.session.get('access_token', None)
-		a_token = oauth.OAuthToken.from_string(a)
-		t = startAPIs(CONSUMER_KEY, CONSUMER_SECRET, a_token)
-		request.session['user'] = t.VerifyCredentials().screen_name
-		request.session['pic'] = t.VerifyCredentials().profile_image_url
+		# a = request.session.get('access_token', None)
+		# if not a:
+		# 	raise
+		# a_token = oauth.OAuthToken.from_string(a)
+		# t = startAPIs(CONSUMER_KEY, CONSUMER_SECRET, a_token)
+		# request.session['user'] = t.VerifyCredentials().screen_name
+		# request.session['pic'] = t.VerifyCredentials().profile_image_url
 		user = 	request.session.get('user', None)
 		pic = request.session.get('pic', None)
+		if not user or not pic:
+			raise
 	
 		return render_to_response('info.html', {'user':user, 'pic':pic})
 	#return render_to_response('redirect.html')
@@ -104,10 +117,11 @@ def getHashInfo(request):
 		# any errors in pulling the user's info and redirect them
 		# to the login page.
 		user = request.session.get('user', None)
-		try:
-			getHighFive(b, t, user)
-		except:
-			return HttpResponse(u"Could not retrieve data! Please try again later.")
+		# try:
+		# 	getHighFive(b, t, user)
+		# except:
+		# 	return HttpResponse(u"Could not retrieve your data! Please try again later.")
+		getHighFive(b, t, user)
 		highFive = Hashdata.objects.filter(username=user).order_by("-time", "clicks")[0:5]
 		results = []
 		for x in highFive:
@@ -116,15 +130,6 @@ def getHashInfo(request):
 		                	'source': x.source,
 		                	'bhash': x.bhash})
 		return render_to_response('palm2.html', {'results':results})
-
-def printHashInfo(request):
-	""" Pull top five links from the SQL database, and send them to
-	the link view. """
-	user = request.session.get('user', None)
-	pic = request.session.get('pic', None)
-    # t = get_template('palm2.html')
-    # html = t.render(Context({'results':results}))
-	return render_to_response('palm.html')
 
 def hello(request):
 	""" Test function. """
