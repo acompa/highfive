@@ -1,52 +1,28 @@
-{% extends 'base.html' %}
+{% for i in results %}
+	<script type="text/javascript">
+		function score(kind, hashcode) {
+			$.getJSON("vote/", { bhash: hashcode, score: kind }, function(json) { });
+		}
 
-{% block title %}HighFive &ndash; {{user}}{% endblock %}
-
-{% block toparea %}
-  	<div id="top">
-			<span id="hi5" class="hi5title">
-				HighFive
-				<span id="manage">
-					<a href="http://www.twitter.com/{{user}}"><img src="{{pic}}" height="40" width="40" alt="{{user}}"></a>
-					<a href="http://www.twitter.com/{{user}}" class="username">{{user}}</a>
-					<div id="logout"> 
-						<a href="http://acompa.net/highfive/logout/" class="signout">Logout.</a> 
-					</div>
-				</span>
-			</span>
-			<br><br>
-		</div>
-{% endblock %}
-
-{% block body %}
-	<div id="link-section">
-		{% for i in results %}
-		<script type="text/javascript">
-			function score(kind, hashcode) {
-				$.getJSON("vote/", { bhash: hashcode, score: kind }, function(json) { });
-			}
-
-			function addClickHandlers() {
-				$("#{{i.bhash}}").click(
-					function() { 
-						score("up", "{{i.bhash}}"); 				
-						$("#{{i.bhash}}").hide(); 
-						});
+		function addClickHandlers() {
+			$("#{{i.bhash}}").click(
+				function() { 
+					score("up", "{{i.bhash}}"); 				
+					$("#{{i.bhash}}").hide(); 
+					});
 				// $("#downvote").click(function() { score("down") });
-			}
-			$(document).ready(addClickHandlers);
-		</script>
-		<span class="vote">
-			<span id="{{i.bhash}}"><img src="http://acompa.net/static/highfive/vote.gif" alt="Vote if you like this article."></span>
-			<!-- <span id="downvote">V</span> -->
-		</span>
-		<div class="title"> 
-			<a href="{{ i.url }}" class="title" TARGET="_blank">{{ i.title }} </a>
-			<br>
-			<div class="address">
-				{{ i.url }}  --  from <a href="http://www.twitter.com/{{ i.source }}" class="source">{{ i.source }}</a>
-			</div>
+		}
+		$(document).ready(addClickHandlers);
+	</script>
+	<span class="vote">
+		<span id="{{i.bhash}}"><img src="http://acompa.net/static/highfive/vote.gif" alt="Vote if you like this article."></span>
+	<!-- <span id="downvote">V</span> -->
+	</span>
+	<div class="title"> 
+		<a href="{{ i.url }}" class="title" TARGET="_blank">{{ i.title }} </a>
+		<br>
+		<div class="address">
+		{{ i.url }}  &mdash;  from <a href="http://www.twitter.com/{{ i.source }}" class="source">{{ i.source }}</a>
 		</div>
-			{% endfor %}
 	</div>
-{% endblock %}
+{% endfor %}

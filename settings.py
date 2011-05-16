@@ -16,12 +16,11 @@ EMAIL_PORT = 587
 SERVER_EMAIL = 'webmaster@acompa.net'
 
 CONSUMER_KEY = "c1z2SA8p1EAXthvpCrYUA"
- 
 CONSUMER_SECRET = "2Qh67Sf2I9iV13apPtdNXvQTwQ5NikJZRTjiQ9Gagac"
  
 AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
     'highfive.backends.twitteroauth.TwitterBackend',
+    'django.contrib.auth.backends.ModelBackend',
 )
  
 AUTH_PROFILE_MODULE = "hi5app.userprofile"
@@ -48,7 +47,7 @@ DATABASES = {
 # timezone as the operating system.
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
-TIME_ZONE = 'America/New_York'
+TIME_ZONE = 'UTC'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html

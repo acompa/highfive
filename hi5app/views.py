@@ -8,6 +8,7 @@ from django.utils import simplejson
 from django.contrib.auth import login, authenticate
 from django.conf import settings
 from django.core.urlresolvers import reverse
+from django.core.context_processors import csrf
 from tstatus2 import getHighFive, startAPIs
 from bitly_api import Connection
 from inspect import getmembers
@@ -23,7 +24,7 @@ def twitter_signin(request):
 	twitter = OAuthApi(CONSUMER_KEY, CONSUMER_SECRET)
 	request_token = twitter.getRequestToken()
 	request.session['request_token'] = request_token.to_string()
-	signin_url = twitter.getSigninURL(request_token)
+	signin_url = twitter.getAuthorizationURL(request_token)
 	return HttpResponseRedirect(signin_url)
  
 def twitter_return(request):
@@ -46,7 +47,15 @@ def twitter_return(request):
 		return HttpResponse("Something wrong! Tokens do not match...")
  
 	twitter = OAuthApi(CONSUMER_KEY, CONSUMER_SECRET, token)
+	print token
 	access_token = twitter.getAccessToken()
+	
+	# Save user info.
+	t = startAPIs(CONSUMER_KEY, CONSUMER_SECRET, access_token)
+	user = t.VerifyCredentials().screen_name
+	pic = t.VerifyCredentials().profile_image_url
+	request.session['user'] = user
+	request.session['pic'] = pic
  
 	# print getmembers(access_token)
 	auth_user = authenticate(access_token=access_token)
@@ -62,18 +71,23 @@ def twitter_return(request):
 		return HttpResponse("Unable to authenticate you!")
  
 	# authentication was successful, user is now logged in
-	return HttpResponseRedirect(reverse('redirect'))
+	#return HttpResponseRedirect(reverse('redirect'))
+	return HttpResponseRedirect(reverse('l'))
 	
 def tempLoad(request):
 	""" Temporarily display a loading page. """
 	sleep(2)
 	return HttpResponseRedirect(reverse('l'))
 	#return render_to_response('redirect.html')
-	
+
 def getHashInfo(request):
 	""" Sorts the data in reverse chronological order, by highest
 	number of clicks. General Django rule: perform all business logic
 	in views.py and not the HTML. """
+	
+	# Authenticating to avoid CSRF attacks.
+	#c = {}
+	#c.update(csrf(request))	
 	
 	# In the future, ALWAYS use session's 'get' method to retrieve 
 	# values.
@@ -84,19 +98,14 @@ def getHashInfo(request):
 	b = Connection('acompa', 'R_9c2643b4c8c85a250493e90ce27a624d')
 	t = startAPIs(CONSUMER_KEY, CONSUMER_SECRET, a_token)
 
-	# Save user info.
-	user = t.VerifyCredentials().screen_name
-	pic = t.VerifyCredentials().profile_image_url
-	request.session['user'] = user
-	request.session['pic'] = pic
-	
 	# Calculate the top links and store them to SQL db. Catch
 	# any errors in pulling the user's info and redirect them
 	# to the login page.
+	user = request.session.get('user', None)
 	try:
 		getHighFive(b, t, user)
 	except:
-		return HttpResponseRedirect(reverse('login'))
+		return HttpResponseRedirect(reverse('intro'))
 	return HttpResponseRedirect(reverse('links'))
 
 def printHashInfo(request):
@@ -113,8 +122,8 @@ def printHashInfo(request):
 		                'bhash': x.bhash})
     # t = get_template('palm2.html')
     # html = t.render(Context({'results':results}))
-	return render_to_response('palm2.html', {'results':results, 'user':user, 'pic':pic})
-	
+	return render_to_response('palm.html', {'user':user, 'pic':pic, 'results':results})
+
 def hello(request):
 	""" Test function. """
 	return HttpResponse(u"Hello, world!")

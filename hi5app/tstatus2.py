@@ -8,8 +8,7 @@ from oauthtwitter import OAuthApi
 
 # OAuth for Twitter API.
 def startAPIs(C_KEY, C_SEC, A_TOKEN):
-	twtr = OAuthApi(consumer_key=C_KEY, consumer_secret=C_SEC, 
-	                access_token=A_TOKEN)
+	twtr = OAuthApi(consumer_key=C_KEY, consumer_secret=C_SEC, access_token=A_TOKEN)
 	return twtr
 
 def statusAge(x, page):
@@ -92,7 +91,14 @@ def getHighFive(bitly, twtr, user):
 	              'cpd'   : bitly.clicks_by_day(h)[0]['clicks'][0]['clicks'],
 	              'source': clicksByHash[h][1],
 			      'score' : 0}
-		if (hi5[h]['title'] == None): hi5[h]['title'] = "No title."
+		if (hi5[h]['title'] == None): 
+			try:
+				from urllib import urlopen
+				from BeautifulSoup import BeautifulSoup
+				soup = BeautifulSoup(urlopen(hi5[h]['url']))
+				hi5[h]['title'] = soup.title.string
+			except:
+				hi5[h]['title'] = "No title."
 		print "From %s (with %i clicks)" % (hi5[h]['source'], clicksByHash[h][0])
 		print "URL: %s\n" % hi5[h]['url']
 
