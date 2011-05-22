@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+	
+{% block title %}HighFive{% endblock %}
+
+{% block toparea %}
+  	<div id="top">
+			<span id="hi5" class="hi5title">
+				HighFive
+				<span id="manage">
+					
+				</span>
+			</span>
+			<br><br>
+		</div>
+{% endblock %}
+
+{% block body %}
+	<div id="link-section">
+		<div id="loading">
+			<span class="title"> Thanks for logging in. Let's confirm your credentials... </span>
+		</div>
+	</div>
+		<script type="text/javascript">
+		$(document).ready( function() {
+			// simulate user click to redirect to links
+			window.location.href = "http://acompa.net/highfive/oauth";
+			});
+		</script>
+{% endblock %}

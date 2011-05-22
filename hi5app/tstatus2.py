@@ -1,62 +1,72 @@
 import twitter, timeit, sys
 from time import time
+from datetime import datetime, timedelta
+from calendar import timegm
 from bitly_api import Connection
 from operator import itemgetter
 from heapq import nlargest
 from re import findall
 from oauthtwitter import OAuthApi
 
-# OAuth for Twitter API.
+# Testing program performance
+from timeit import timeit, Timer
+from random import randint
+
 def startAPIs(C_KEY, C_SEC, A_TOKEN):
 	twtr = OAuthApi(consumer_key=C_KEY, consumer_secret=C_SEC, access_token=A_TOKEN)
 	return twtr
 
-def statusAge(tweet):
-	return (time() - tweet.created_at_in_seconds) / (60*60)
+def status_age(tweet):
+	return (datetime.now() - tweet.created_at)
 
-def getHighFive(bitly, twtr, user):
+def get_highfive(bitly, twtr, user):
 	statuses = []
-	statusListIsComplete = False
-	pagenum = 1
+	completedList = False
+	pagenum = 0
+	dt = timedelta(seconds = 86401)
 	
 	# Start pulling pages of statuses. As long as the last status 
 	# on a given page is not older than 24h, keep pulling pages.
-	while not statusListIsComplete:
-		page = twtr.GetFriendsTimeline(user=user, page=pagenum, count=100)	
+	while not completedList:
+		if pagenum != 0:
+			statuses.append(page)
+		pagenum += 1
+		page = twtr.friends_timeline(user=user, page=pagenum, count=200)	
 		pagelen = len(page)
-		x = pagelen
+		print pagelen
+		x = pagelen - 1
 		
 		# Have we exceeded the # of allowed API calls?
 		if pagelen == 0: 
 			break
-
+		
  		# Use binary search to find the last update from 24hrs ago.
-		while statusAge(page[x]) > 24.0:
+		if status_age(page[x]) > dt:
+			if status_age(page[0]) > dt:
+				x = 0
+				break
 			newest = 0          
 			oldest = pagelen - 1
-			midpoint = (newest + oldest) / 2
+			x = (newest + oldest) / 2
+			while True:
+				x = (newest + oldest) / 2
+				if x != pagelen:
+					if status_age(page[x]) <= dt:
+						newest = x 
+					if status_age(page[x]) > dt:
+						oldest = x
 
-			if x != pagelen:
-				if statusAge(page[x]) <= 24.0:
-					newest = midpoint 
-				if statusAge(page[x]) > 24.0:
-					oldest = midpoint
-					
-			midpoint = (newest + oldest) / 2
-			if x == midpoint:
-				statusListIsComplete = True
-				break
-			x = midpoint
-
-		if not statusListIsComplete:
-			statuses.append(page)
-			pagenum += 1
+				if status_age(page[x]) > dt and status_age(page[x - 1]) <= dt \
+				or status_age(page[x]) <= dt and status_age(page[x + 1]) > dt:
+					completedList = True
+					break
 
 	statuses.append(page[:x])
 
 	# List-flattening list comprehension.
 	statuses = [item for sublist in statuses for item in sublist]
 	print "%i tweets from friends in the last 24 hours." % len(statuses)
+	print "Oldest tweet at", statuses[-1].created_at
 
 	# Instantiating a list for the bit.ly hashes. Then scan every friend's 
 	# status for bit.ly links, store those hashes in a dictionary.
@@ -64,16 +74,16 @@ def getHighFive(bitly, twtr, user):
 	clicksByHash = {}
 	for s in statuses:
 		r = findall(r"[a-z]{1,5}\.[a-z]{1,3}/[A-Za-z0-9]{6}", s.text)
-		if len(r) > 0 and r[0][:-7] != "su.pr" and "t.co" and "ow.ly" and "say.ly":
-			h = r[0][-6:]
-			try:
-				clicksByHash[h] = (bitly.clicks(h)[0]['global_clicks'],
-								   s.user.screen_name)
-			except KeyError or BitlyError:
-				#print s.text
-				continue
+		if len(r) > 0:
+			if r[0][:-7] != "su.pr" and "t.co" and "ow.ly" and "say.ly":
+				h = r[0][-6:]
+				try:
+					clicksByHash[h] = (bitly.clicks(h)[0]['global_clicks'],
+									   s.user.screen_name)
+				except KeyError or BitlyError:
+					#print s.text
+					continue
 		else:
-			#print "Found a Twitter or StumbleUpon hash!"
 			continue
 		hashes.append(h)
 		

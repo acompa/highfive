@@ -1,13 +1,23 @@
 {% extends 'base.html' %}
 	
-{% block title %}HighFive &mdash; {{user}}{% endblock %}
+{% block title %}HighFive: {{ user }}{% endblock %}
 
 {% block toparea %}
+	<script type="text/javascript">
+		// on ready, send Ajax request for link info
+		$(document).ready( function() {
+			$('#link-section').load('../l/');
+		});
+	</script>
   	<div id="top">
 			<span id="hi5" class="hi5title">
 				HighFive
 				<span id="manage">
-					
+					<a href="http://www.twitter.com/{{user}}"><img src="{{pic}}" height="40" width="40" alt="{{user}}"></a>
+					<a href="http://www.twitter.com/{{user}}" class="username">{{user}}</a>
+					<div id="logout"> 
+						<a href="http://acompa.net/highfive/logout/" class="signout">Logout.</a> 
+					</div>					
 				</span>
 			</span>
 			<br><br>
@@ -17,8 +27,7 @@
 {% block body %}
 	<div id="link-section">
 		<div id="loading">
-			<span class="title"> Setting up your high five... </span>
+			<span class="title"> All right, you're logged in! Setting up your high five... </span>
 		</div>
 	</div>
-		<script type="text/javascript" src="http://acompa.net/static/highfive/uptop.js"></script>
 {% endblock %}

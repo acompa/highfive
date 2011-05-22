@@ -1,1 +1,3 @@
-*.pyc
+./hi5app/*.pyc
+./*.pyc
+settings.py
