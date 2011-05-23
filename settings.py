@@ -1,4 +1,5 @@
 # Django settings for highfive project.
+import pw
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
@@ -11,7 +12,7 @@ ADMINS = (
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'achompas'
-EMAIL_HOST_PASSWORD = getattr(pw, 'EMAIL_PW', None)
+EMAIL_HOST_PASSWORD = pw.EMAIL_PW
 EMAIL_PORT = 587
 SERVER_EMAIL = 'webmaster@acompa.net'
 
@@ -34,7 +35,7 @@ DATABASES = {
         'ENGINE': 'mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'highfive',                      # Or path to database file if using sqlite3.
         'USER': 'highfiveuser',                      # Not used with sqlite3.
-        'PASSWORD': getattr(pw, 'DB_PW', None),                  # Not used with sqlite3.
+        'PASSWORD': pw.DB_PW,                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
