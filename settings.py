@@ -16,8 +16,8 @@ EMAIL_HOST_PASSWORD = pw.EMAIL_PW
 EMAIL_PORT = 587
 SERVER_EMAIL = 'webmaster@acompa.net'
 
-CONSUMER_KEY = "c1z2SA8p1EAXthvpCrYUA"
-CONSUMER_SECRET = "2Qh67Sf2I9iV13apPtdNXvQTwQ5NikJZRTjiQ9Gagac"
+CONSUMER_KEY = pw.C_KEY
+CONSUMER_SECRET = pw.C_SECRET
  
 AUTHENTICATION_BACKENDS = (
     'highfive.backends.twitteroauth.TwitterBackend',

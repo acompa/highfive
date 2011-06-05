@@ -11,18 +11,34 @@
 					$("#{{i.bhash}}").hide(); 
 					});
 				// $("#downvote").click(function() { score("down") });
+			
 		}
 		$(document).ready(addClickHandlers);
 	</script>
+	{% if i.score == 0 %}
 	<span class="vote">
 		<span id="{{i.bhash}}"><img src="http://acompa.net/static/highfive/vote.gif" alt="Vote if you like this article."></span>
 	<!-- <span id="downvote">V</span> -->
 	</span>
+	{% endif %}
 	<div class="title"> 
-		<a href="{{ i.url }}" class="title" TARGET="_blank">{{ i.title }} </a>
+		<a href="{{ i.longurl }}" class="title" TARGET="_blank">{{ i.title }} </a>
 		<br>
 		<div class="address">
-		{{ i.url }}  &ndash;  from <a href="http://www.twitter.com/{{ i.source }}" class="source">{{ i.source }}</a>
+		from {{ i.url }}  via <a href="http://www.twitter.com/{{ i.source }}" class="source">{{ i.source }}</a>
 		</div>
-	</div>
+	</div>	
 {% endfor %}
+
+{% if moreLinks %}
+<script type="text/javascript">
+	$(function() {
+		$("#nextlinks").click(
+			function(evt) {
+			$('#link-section').load('../l/{{ next }}');
+			evt.preventDefault();
+		})
+	})
+</script>
+<a href="#" id="nextlinks">Another high five!</a>
+{% endif %}

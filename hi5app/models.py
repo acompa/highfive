@@ -2,22 +2,29 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
 
-class Hashdata(models.Model):
-	""" Data in MySQL for each bit.ly hash. Add 'user' to this soon. """
+class ModelInputs(models.Model):
+	"""
+	Table for recommendation model inputs and outputs for each hash
+	at a given point in time.
+	"""
+	
 	username = models.CharField(max_length=20)
 	bhash = models.CharField(max_length=6)
-	title = models.CharField(max_length=200)
-	url = models.URLField()
-	time = models.FloatField()        #seconds since epoch
+	time = models.FloatField()
 	clicks = models.IntegerField()
-	cpm = models.FloatField()
-	cpd = models.FloatField()
-	source = models.CharField(max_length=15)
+	cpm = models.IntegerField()
+	cpd = models.IntegerField()
+	timeline_count = models.IntegerField()
+	source = models.CharField(max_length=20)
 	score = models.IntegerField()
 	
 	def __unicode__(self):
-		return self.username
-		
+		return u'%s' % self.username
+	
+	def vote_for_hash(self):
+		self.score = 1
+		self.save()	
+
 	def up(self):
 		self.score += 1
 		self.save()
@@ -25,6 +32,16 @@ class Hashdata(models.Model):
 	def down(self):
 		self.score -= 1
 		self.save()
+
+class BitlyHashInfo(models.Model):
+	"""
+	Table with bit.ly info on each hash. Will save queries to bit.ly
+	API in the future.
+	"""
+	
+	bhash = models.CharField(max_length=6)
+	title = models.CharField(max_length=200)
+	url = models.URLField()
 
 class UserProfile(models.Model):
 	user = models.ForeignKey(User)
