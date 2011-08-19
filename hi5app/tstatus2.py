@@ -88,16 +88,7 @@ def scrape_timeline(bitly, twtr, user):
                     h = bitly.lookup(link)[0]['global_hash']
                 except KeyError:
                     continue
-        # ## Obsolete code.
-        # r = findall(r"[a-z]{1,5}\.[a-z]{1,3}/[A-Za-z0-9]{6}", s.text)
-        # if len(r) > 0:
-        #     print r[0]
-        #     if r[0][:-7] != "su.pr" and "t.co" and "ow.ly" and "say.ly":
-        #         h = r[0][-6:]
-        # ## /obsolete code.
             try:
-                # bitlyInfo = bitly.clicks(h)[0]
-                # globalHash = bitlyInfo['global_hash']
                 # Saving # of times the hash appears in user's timeline.
                 if h in timelineData:
                     timelineData[h]['timeline_count'] += 1
